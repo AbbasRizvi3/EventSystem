@@ -49,13 +49,13 @@ services:
       - key: GMAIL_PASSWORD
         sync: false
 
+  - type: redis
+    name: event-system-redis
+    plan: free
+    ipAllowList: []
+
 databases:
   - name: event-system-db
     plan: free
     databaseName: event_system_production
     user: event_system
-
-  - name: event-system-redis
-    type: redis
-    plan: free
-    ipAllowList: []

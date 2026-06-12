@@ -67,6 +67,7 @@ gem "pundit"
 gem "sidekiq"
 gem "redis"
 gem "kaminari"
+gem "resend"
 
 group :development, :test do
   gem "rspec-rails"

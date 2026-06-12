@@ -1,0 +1,96 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm border-0" data-event-id="<%= @event.id %>">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start mb-3">
+          <h1 class="h3 fw-bold mb-0"><%= @event.title %></h1>
+          <span id="event-status" class="badge <%= @event.active? ? 'bg-success' : 'bg-danger' %> fs-6"><%= @event.status.capitalize %></span>
+        </div>
+
+        <% if @event.description.present? %>
+          <p class="text-muted mb-4"><%= @event.description %></p>
+        <% end %>
+
+        <div class="row g-3 mb-4">
+          <div class="col-sm-6">
+            <div class="d-flex align-items-center text-muted">
+              <i class="bi bi-geo-alt-fill text-primary me-2 fs-5"></i>
+              <span><%= @event.location %></span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="d-flex align-items-center text-muted">
+              <i class="bi bi-calendar-check text-primary me-2 fs-5"></i>
+              <span><%= @event.start_time.strftime("%b %d, %Y %H:%M") %></span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="d-flex align-items-center text-muted">
+              <i class="bi bi-calendar-x text-primary me-2 fs-5"></i>
+              <span><%= @event.end_time.strftime("%b %d, %Y %H:%M") %></span>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="d-flex align-items-center text-muted">
+              <i class="bi bi-people-fill text-primary me-2 fs-5"></i>
+              <span id="seats-available"><%= @event.capacity - @event.registrations.confirmed.count %> / <%= @event.capacity %> spots available</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="d-flex flex-wrap gap-2" id="event-actions">
+          <% if current_user.registrations.exists?(event: @event, status: "confirmed") %>
+            <% registration = current_user.registrations.find_by(event: @event) %>
+            <%= button_to event_registration_path(@event, registration), method: :delete, class: "btn btn-outline-danger", data: { confirm: "Cancel your registration?" } do %>
+              <i class="bi bi-x-circle me-1"></i> Cancel Registration
+            <% end %>
+          <% elsif policy(Registration.new).create? %>
+            <%= button_to event_registrations_path(@event), method: :post, class: "btn btn-success" do %>
+              <i class="bi bi-check-circle me-1"></i> Register
+            <% end %>
+          <% end %>
+
+          <% unless current_user.registrations.exists?(event: @event, status: "confirmed") %>
+            <% if @event.registrations.confirmed.count >= @event.capacity && !WaitListEntry.exists?(user: current_user, event: @event) && !@event.cancelled? %>
+              <% if policy(WaitListEntry.new).create? %>
+                <%= button_to event_waitlist_entries_path(@event), method: :post, class: "btn btn-warning" do %>
+                  <i class="bi bi-hourglass-split me-1"></i> Join Waitlist
+                <% end %>
+              <% end %>
+            <% end %>
+          <% end %>
+
+          <% if WaitListEntry.exists?(user: current_user, event: @event) %>
+            <% waitlist_entry = WaitListEntry.find_by(user: current_user, event: @event) %>
+            <span id="waitlist-position" class="badge bg-warning text-dark align-self-center fs-6">Waitlist position: <%= waitlist_entry.position %></span>
+            <%= button_to event_waitlist_entry_path(@event, waitlist_entry), method: :delete, class: "btn btn-outline-warning" do %>
+              <i class="bi bi-x me-1"></i> Leave Waitlist
+            <% end %>
+          <% end %>
+
+          <% if policy(@event).edit? %>
+            <%= link_to edit_event_path(@event), class: "btn btn-outline-secondary" do %>
+              <i class="bi bi-pencil me-1"></i> Edit
+            <% end %>
+          <% end %>
+
+          <% if policy(@event).cancel? && @event.active? %>
+            <%= button_to cancel_event_path(@event), method: :patch, class: "btn btn-outline-danger", data: { confirm: "Cancel this event?" } do %>
+              <i class="bi bi-slash-circle me-1"></i> Cancel Event
+            <% end %>
+          <% end %>
+
+          <% if policy(@event).destroy? %>
+            <%= button_to event_path(@event), method: :delete, class: "btn btn-danger", data: { confirm: "Delete this event?" } do %>
+              <i class="bi bi-trash me-1"></i> Delete
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <%= link_to events_path, class: "btn btn-link text-muted mt-3 ps-0" do %>
+      <i class="bi bi-arrow-left me-1"></i> Back to Events
+    <% end %>
+  </div>
+</div>

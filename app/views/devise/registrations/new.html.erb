@@ -1,0 +1,44 @@
+<div class="row justify-content-center">
+  <div class="col-lg-5">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 fw-bold mb-4">Sign Up</h1>
+
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+          <div class="mb-3">
+            <%= f.label :name, class: "form-label fw-semibold" %>
+            <%= f.text_field :name, class: "form-control #{'is-invalid' if resource.errors[:name].any?}", required: true, autofocus: true %>
+            <div class="invalid-feedback"><%= resource.errors[:name].first %></div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :email, class: "form-label fw-semibold" %>
+            <%= f.email_field :email, class: "form-control #{'is-invalid' if resource.errors[:email].any?}", required: true %>
+            <div class="invalid-feedback"><%= resource.errors[:email].first %></div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, class: "form-label fw-semibold" %>
+            <% if @minimum_password_length %>
+              <small class="text-muted ms-1">(<%= @minimum_password_length %> characters minimum)</small>
+            <% end %>
+            <%= f.password_field :password, class: "form-control #{'is-invalid' if resource.errors[:password].any?}", required: true, minlength: @minimum_password_length, autocomplete: "new-password" %>
+            <div class="invalid-feedback"><%= resource.errors[:password].first %></div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :password_confirmation, class: "form-label fw-semibold" %>
+            <%= f.password_field :password_confirmation, class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].any?}", required: true, autocomplete: "new-password" %>
+            <div class="invalid-feedback"><%= resource.errors[:password_confirmation].first %></div>
+          </div>
+
+          <%= f.submit "Sign Up", class: "btn btn-primary w-100" %>
+        <% end %>
+
+        <div class="mt-3 text-center text-muted small">
+          <%= render "devise/shared/links" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

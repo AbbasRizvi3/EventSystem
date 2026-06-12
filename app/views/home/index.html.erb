@@ -1,0 +1,13 @@
+<div class="text-center py-5">
+  <i class="bi bi-calendar-event text-primary hero-icon"></i>
+  <h1 class="display-5 fw-bold mt-3">Event Registration System</h1>
+  <p class="lead text-muted">Discover and register for events, or join the waitlist when spots are full.</p>
+  <% if user_signed_in? %>
+    <%= link_to "Browse Events", events_path, class: "btn btn-primary btn-lg mt-2" %>
+  <% else %>
+    <div class="d-flex justify-content-center gap-3 mt-3">
+      <%= link_to "Sign In", new_user_session_path, class: "btn btn-primary btn-lg" %>
+      <%= link_to "Sign Up", new_user_registration_path, class: "btn btn-outline-primary btn-lg" %>
+    </div>
+  <% end %>
+</div>

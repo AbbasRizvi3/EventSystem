@@ -1,0 +1,47 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 fw-bold">Users</h1>
+  <%= link_to new_user_path, class: "btn btn-primary" do %>
+    <i class="bi bi-person-plus me-1"></i> Create New User
+  <% end %>
+</div>
+
+<div class="card border-0 shadow-sm">
+  <div class="table-responsive">
+    <table class="table table-hover mb-0">
+      <thead class="table-light">
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Roles</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @users.each do |user| %>
+          <tr>
+            <td class="fw-semibold"><%= user.name %></td>
+            <td class="text-muted"><%= user.email %></td>
+            <td>
+              <% user.roles.each do |role| %>
+                <span class="badge <%= role.name == 'admin' ? 'bg-danger' : role.name == 'organizer' ? 'bg-primary' : 'bg-secondary' %>"><%= role.name.capitalize %></span>
+              <% end %>
+            </td>
+            <td>
+              <%= link_to user_path(user), class: "btn btn-sm btn-outline-secondary me-1" do %>
+                <i class="bi bi-eye"></i>
+              <% end %>
+              <% if policy(user).destroy? %>
+                <%= button_to user_path(user), method: :delete, class: "btn btn-sm btn-outline-danger", data: { confirm: "Delete #{user.name}?" } do %>
+                  <i class="bi bi-trash"></i>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>
+<div class="mt-4 d-flex justify-content-center">
+  <%= paginate @users %>
+</div>

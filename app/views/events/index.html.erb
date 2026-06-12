@@ -1,0 +1,39 @@
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <h1 class="h3 fw-bold">Events</h1>
+  <% if policy(Event.new).create? %>
+    <%= link_to new_event_path, class: "btn btn-primary" do %>
+      <i class="bi bi-plus-lg me-1"></i> New Event
+    <% end %>
+  <% end %>
+</div>
+
+<% if @events.empty? %>
+  <div class="text-center py-5 text-muted">
+    <i class="bi bi-calendar-x fs-1"></i>
+    <p class="mt-2">No events found.</p>
+  </div>
+<% else %>
+  <div class="row g-4">
+    <% @events.each do |event| %>
+      <div class="col-md-6 col-lg-4">
+        <div class="card h-100 shadow-sm border-0">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-start mb-2">
+              <h5 class="card-title fw-bold mb-0"><%= link_to event.title, event_path(event), class: "text-decoration-none text-dark" %></h5>
+              <span class="badge <%= event.active? ? 'bg-success' : 'bg-danger' %>"><%= event.status.capitalize %></span>
+            </div>
+            <p class="text-muted small mb-1"><i class="bi bi-geo-alt me-1"></i><%= event.location %></p>
+            <p class="text-muted small mb-1"><i class="bi bi-calendar me-1"></i><%= event.start_time.strftime("%b %d, %Y %H:%M") %></p>
+            <p class="text-muted small"><i class="bi bi-people me-1"></i>Capacity: <%= event.capacity %></p>
+          </div>
+          <div class="card-footer bg-transparent border-0">
+            <%= link_to "View Details", event_path(event), class: "btn btn-outline-primary btn-sm w-100" %>
+          </div>
+        </div>
+      </div>
+    <% end %>
+  </div>
+  <div class="mt-4 d-flex justify-content-center">
+    <%= paginate @events %>
+  </div>
+<% end %>

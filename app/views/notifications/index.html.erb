@@ -1,0 +1,41 @@
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <h1 class="h3 fw-bold mb-4"><i class="bi bi-bell me-2"></i>Notifications</h1>
+
+    <% if @notifications.empty? %>
+      <div class="text-center py-5 text-muted">
+        <i class="bi bi-bell-slash fs-1"></i>
+        <p class="mt-2">No notifications yet.</p>
+      </div>
+    <% else %>
+      <div class="d-flex flex-column gap-3">
+        <% @notifications.each do |n| %>
+          <div class="card border-0 shadow-sm">
+            <div class="card-body d-flex align-items-start gap-3">
+              <div class="rounded-circle bg-primary bg-opacity-10 p-2 d-flex align-items-center justify-content-center notification-icon">
+                <% icon = case n.notification_type
+                   when "registration" then "check-circle-fill text-success"
+                   when "waitlist" then "hourglass-split text-warning"
+                   when "promotion" then "star-fill text-primary"
+                   when "cancellation" then "x-circle-fill text-danger"
+                   else "bell-fill text-primary"
+                   end %>
+                <i class="bi bi-<%= icon %> fs-5"></i>
+              </div>
+              <div class="flex-grow-1">
+                <div class="d-flex justify-content-between">
+                  <strong><%= n.title %></strong>
+                  <small class="text-muted"><%= n.created_at.strftime("%b %d, %Y %H:%M") %></small>
+                </div>
+                <p class="mb-0 text-muted"><%= n.body %></p>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    <% end %>
+    <div class="mt-4 d-flex justify-content-center">
+      <%= paginate @notifications %>
+    </div>
+  </div>
+</div>

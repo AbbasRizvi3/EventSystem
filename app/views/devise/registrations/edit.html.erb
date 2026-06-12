@@ -1,0 +1,54 @@
+<div class="row justify-content-center">
+  <div class="col-lg-6">
+    <div class="card border-0 shadow-sm">
+      <div class="card-body p-4">
+        <h1 class="h4 fw-bold mb-4">Edit Profile</h1>
+
+        <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+          <div class="mb-3">
+            <%= f.label :email, class: "form-label fw-semibold" %>
+            <%= f.email_field :email, class: "form-control #{'is-invalid' if resource.errors[:email].any?}", required: true, autofocus: true, autocomplete: "email" %>
+            <div class="invalid-feedback"><%= resource.errors[:email].first %></div>
+            <% if devise_mapping.confirmable? && resource.pending_reconfirmation? %>
+              <small class="text-muted">Currently waiting confirmation for: <%= resource.unconfirmed_email %></small>
+            <% end %>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password, class: "form-label fw-semibold" %>
+            <small class="text-muted ms-1">(leave blank to keep current password)</small>
+            <% if @minimum_password_length %>
+              <small class="text-muted ms-1">(<%= @minimum_password_length %> characters minimum)</small>
+            <% end %>
+            <%= f.password_field :password, class: "form-control #{'is-invalid' if resource.errors[:password].any?}", autocomplete: "new-password" %>
+            <div class="invalid-feedback"><%= resource.errors[:password].first %></div>
+          </div>
+
+          <div class="mb-3">
+            <%= f.label :password_confirmation, class: "form-label fw-semibold" %>
+            <%= f.password_field :password_confirmation, class: "form-control #{'is-invalid' if resource.errors[:password_confirmation].any?}", autocomplete: "new-password" %>
+            <div class="invalid-feedback"><%= resource.errors[:password_confirmation].first %></div>
+          </div>
+
+          <div class="mb-4">
+            <%= f.label :current_password, class: "form-label fw-semibold" %>
+            <small class="text-muted ms-1">(required to confirm changes)</small>
+            <%= f.password_field :current_password, class: "form-control #{'is-invalid' if resource.errors[:current_password].any?}", required: true, autocomplete: "current-password" %>
+            <div class="invalid-feedback"><%= resource.errors[:current_password].first %></div>
+          </div>
+
+          <%= f.submit "Update", class: "btn btn-primary w-100" %>
+        <% end %>
+
+        <hr class="my-4">
+
+        <h2 class="h6 fw-bold text-danger">Danger Zone</h2>
+        <%= button_to "Cancel my account", registration_path(resource_name), data: { confirm: "Are you sure?", turbo_confirm: "Are you sure?" }, method: :delete, class: "btn btn-outline-danger btn-sm" %>
+
+        <div class="mt-3">
+          <%= link_to "Back", :back, class: "btn btn-link text-muted ps-0" %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
